@@ -1,5 +1,5 @@
 {
-  "name": "web-app-starter",
+  "name": "express-ts-prisma-cognito-server",
   "version": "0.0.0",
   "description": "TypeScript + Prisma + MySQL + Express API Server",
   "author": "",
