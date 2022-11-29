@@ -42,6 +42,15 @@ class AuthController {
       next(error);
     }
   };
+
+  public secret = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const userData: User = req.user;
+      res.status(200).json({ data: { secret: `Only ${userData.email} can see this message.` }, message: 'secret' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default AuthController;
