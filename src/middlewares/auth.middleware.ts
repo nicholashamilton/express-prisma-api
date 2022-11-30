@@ -9,7 +9,7 @@ const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFun
     try {
         const Authorization = req.cookies['Authorization'] || (req.header('Authorization') ? req.header('Authorization').split('Bearer ')[1] : null);
 
-        if (Authorization && req.session) {
+        if (Authorization && typeof req.session.userId === 'number') {
             const secretKey: string = SECRET_KEY;
             const authVerificationResponse = (await verify(Authorization, secretKey)) as DataStoredInToken;
             const userId = authVerificationResponse.id;

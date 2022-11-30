@@ -48,13 +48,13 @@ class AuthService {
 
     public createToken(user: User): TokenData {
         const dataStoredInToken: DataStoredInToken = { id: user.id };
-        const secretKey: string = SECRET_KEY;
-        const expiresIn: number = 86400 * 7;
+        const secretKey = SECRET_KEY;
+        const expiresIn = 86400 * 7;
 
         return { expiresIn, token: sign(dataStoredInToken, secretKey, { expiresIn }) };
     }
 
-    public createCookie(tokenData: TokenData): string {
+    public createCookie(tokenData: TokenData) {
         const secure = NODE_ENV === 'production' ? 'secure;' : '';
         return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn}; SameSite=Lax; ${secure}`;
     }
