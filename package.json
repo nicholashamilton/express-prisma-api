@@ -1,8 +1,8 @@
 {
-  "name": "express-ts-prisma-cognito-server",
+  "name": "express-prisma-api",
   "version": "0.0.0",
-  "description": "TypeScript + Prisma + MySQL + Express API Server",
-  "author": "",
+  "description": "Express Prisma API Server",
+  "author": "Nicholas Hamilton",
   "license": "ISC",
   "scripts": {
     "start": "npm run build && cross-env NODE_ENV=production node dist/server.js",

@@ -5,30 +5,56 @@ import { SECRET_KEY } from '@config';
 import { HttpException } from '@exceptions/HttpException';
 import { DataStoredInToken, RequestWithUser } from '@interfaces/auth.interface';
 
-const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+const getAuthorization = (req: RequestWithUser) => {
+    let token: string = req.cookies['Authorization'] ?? '';
+    if (!token) token = req.header('Authorization').split('Bearer ')[1] ?? '';
+    return token;
+}
+
+const userAuthMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-        const Authorization = req.cookies['Authorization'] || (req.header('Authorization') ? req.header('Authorization').split('Bearer ')[1] : null);
+        const Authorization = getAuthorization(req);
 
-        if (Authorization && typeof req.session.userId === 'number') {
-            const secretKey: string = SECRET_KEY;
-            const authVerificationResponse = (await verify(Authorization, secretKey)) as DataStoredInToken;
-            const userId = authVerificationResponse.id;
+        if (!Authorization) next(new HttpException(404, 'Authentication token missing'));
 
-            const users = new PrismaClient().user;
-            const user = await users.findUnique({ where: { id: Number(userId) } });
+        const secretKey: string = SECRET_KEY;
+        const authVerificationResponse = (await verify(Authorization, secretKey)) as DataStoredInToken;
+        const userId = authVerificationResponse.id;
 
-            if (user && userId === req.session.userId) {
-                req.user = user;
-                next();
-            } else {
-                next(new HttpException(401, 'Wrong authentication token'));
-            }
-        } else {
-            next(new HttpException(404, 'Authentication token missing'));
-        }
+        const users = new PrismaClient().user;
+        const user = await users.findUnique({ where: { id: Number(userId) } });
+
+        if (!user) next(new HttpException(401, 'Wrong authentication token'));
+
+        req.user = user;
+        next();
+
     } catch (error) {
         next(new HttpException(401, 'Wrong authentication token'));
     }
 };
 
-export default authMiddleware;
+const adminAuthMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    try {
+        const Authorization = getAuthorization(req);
+
+        if (!Authorization) next(new HttpException(404, 'Authentication token missing'));
+
+        const secretKey: string = SECRET_KEY;
+        const authVerificationResponse = (await verify(Authorization, secretKey)) as DataStoredInToken;
+        const userId = authVerificationResponse.id;
+
+        const users = new PrismaClient().user;
+        const user = await users.findUnique({ where: { id: Number(userId) } });
+
+        if (!user || user.role !== "ADMIN") next(new HttpException(401, 'Wrong authentication token'));
+
+        req.user = user;
+        next();
+
+    } catch (error) {
+        next(new HttpException(401, 'Wrong authentication token'));
+    }
+};
+
+export { userAuthMiddleware, adminAuthMiddleware, };

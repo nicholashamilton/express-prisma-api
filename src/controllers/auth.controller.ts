@@ -7,7 +7,7 @@ import AuthService from '@services/auth.service';
 class AuthController {
     public authService = new AuthService();
 
-    public signUp = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    public signUp = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userData: CreateUserDto = req.body;
             const signUpUserData: User = await this.authService.signup(userData);
@@ -19,12 +19,15 @@ class AuthController {
         }
     };
 
-    public logIn = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    public logIn = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userData: CreateUserDto = req.body;
             const { cookie, findUser } = await this.authService.login(userData);
 
-            req.session.userId = findUser.id;
+            req.session.user = {
+                id: findUser.id,
+                email: findUser.email,
+            };
             res.setHeader('Set-Cookie', [cookie]);
 
             res.status(200).json({ data: { user: { email: userData.email } }, message: 'login' });
@@ -34,7 +37,7 @@ class AuthController {
         }
     };
 
-    public logOut = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    public logOut = async (req: RequestWithUser, res: Response, next: NextFunction) => {
         try {
             const userData = req.user;
             const logOutUserData: User = await this.authService.logout(userData);
@@ -49,7 +52,7 @@ class AuthController {
         }
     };
 
-    public secret = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    public secret = async (req: RequestWithUser, res: Response, next: NextFunction) => {
         try {
             const userData: User = req.user;
             res.status(200).json({ data: { secret: `Only ${userData.email} can see this message.` }, message: 'secret' });

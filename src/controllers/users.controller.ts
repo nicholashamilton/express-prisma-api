@@ -6,7 +6,7 @@ import userService from '@services/users.service';
 class UsersController {
     public userService = new userService();
 
-    public getUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    public getUsers = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const findAllUsersData: User[] = await this.userService.findAllUser();
 
@@ -16,7 +16,7 @@ class UsersController {
         }
     };
 
-    public getUserById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    public getUserById = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userId = Number(req.params.id);
             const findOneUserData: User = await this.userService.findUserById(userId);
@@ -27,7 +27,7 @@ class UsersController {
         }
     };
 
-    public createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    public createUser = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userData: CreateUserDto = req.body;
             const createUserData: User = await this.userService.createUser(userData);
@@ -38,7 +38,7 @@ class UsersController {
         }
     };
 
-    public updateUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    public updateUser = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userId = Number(req.params.id);
             const userData: CreateUserDto = req.body;
@@ -50,7 +50,7 @@ class UsersController {
         }
     };
 
-    public deleteUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    public deleteUser = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userId = Number(req.params.id);
             const deleteUserData: User = await this.userService.deleteUser(userId);
