@@ -1,7 +1,7 @@
 {
   "name": "express-prisma-api",
   "version": "0.0.0",
-  "description": "Express Prisma API Server",
+  "description": "Express Prisma API",
   "author": "Nicholas Hamilton",
   "license": "ISC",
   "scripts": {
