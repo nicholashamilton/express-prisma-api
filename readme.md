@@ -18,7 +18,8 @@ A [Postman](https://www.postman.com/) collection can be found [here](https://git
 ### Notes
 This project is still being worked on. Here is a brief overview of the roadmap.
 
- * [x] Auth Endpoints (signIn, logIn, logOut, secret)
- * [ ] Auth Endpoints (currentUser, passwordReset, confirmEmail)
+ * [x] Auth Endpoints (signIn, logIn, logOut, secret, currentUser)
+ * [ ] Auth Endpoints (passwordReset, confirmEmail)
  * [x] Admin Endpoints (getUsers, getUserById, createUser, updateUser, deleteUser)
+ * [ ] Refresh tokens (only allow most recent RT, invalidate all RT if newest is not used, generate new AT and RT with valid RT)
  * [ ] Redis session cache
