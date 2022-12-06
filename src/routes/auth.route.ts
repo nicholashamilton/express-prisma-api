@@ -38,6 +38,12 @@ class AuthRoute implements Routes {
             userAuthMiddleware,
             this.authController.secret
         );
+
+        this.router.get(
+            `/currentUser`,
+            userAuthMiddleware,
+            this.authController.current
+        );
     }
 }
 
