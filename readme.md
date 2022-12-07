@@ -10,6 +10,8 @@ Install node modules `npm install`
 
 Generate Prisma Client `npm run prisma:generate`
 
+Migrate Prisma `npm run prisma:migrate`
+
 Start dev environment `npm run dev`
 
 ## Postman
@@ -18,8 +20,10 @@ A [Postman](https://www.postman.com/) collection can be found [here](https://git
 ### Notes
 This project is still being worked on. Here is a brief overview of the roadmap.
 
- * [x] Auth Endpoints (signIn, logIn, logOut, secret, currentUser)
+ * [x] Auth Endpoints (signUp, logIn, logOut, secret, currentUser, refresh)
  * [ ] Auth Endpoints (passwordReset, confirmEmail)
  * [x] Admin Endpoints (getUsers, getUserById, createUser, updateUser, deleteUser)
- * [ ] Refresh tokens (only allow most recent RT, invalidate all RT if newest is not used, generate new AT and RT with valid RT)
- * [ ] Redis session cache
+ * [x] Access Tokens use Bearer Authentication header (valid for 10min)
+ * [x] Refresh Tokens use httpOnly SameSite lax secure cookie (valid for 1day, only 1 RT may be valid per user, using a stale RT will destroy users valid RT for security, generate new AT and RT with valid RT)
+
+Open to suggestions and ideas. Open an issue [here](https://github.com/nicholashamilton/express-prisma-api/issues).

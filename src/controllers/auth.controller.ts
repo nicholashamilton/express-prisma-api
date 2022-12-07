@@ -10,9 +10,14 @@ class AuthController {
     public signUp = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userData: CreateUserDto = req.body;
-            const signUpUserData: User = await this.authService.signup(userData);
+            const signUpUserData = await this.authService.signup(userData);
 
-            res.status(201).json({ data: { user: { email: signUpUserData.email } }, message: 'signup' });
+            res.status(201).json({
+                data: {
+                    user: this.authService.getPublicUser(signUpUserData),
+                },
+                message: 'signup',
+            });
 
         } catch (error) {
             next(error);
@@ -22,15 +27,19 @@ class AuthController {
     public logIn = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userData: CreateUserDto = req.body;
-            const { cookie, findUser } = await this.authService.login(userData);
+            const { cookie, accessToken, refreshToken, findUser } = await this.authService.login(userData);
 
-            req.session.user = {
-                id: findUser.id,
-                email: findUser.email,
-            };
+            await this.authService.updateUsersRefreshToken(findUser.id, refreshToken.token);
+
             res.setHeader('Set-Cookie', [cookie]);
 
-            res.status(200).json({ data: { user: { email: userData.email } }, message: 'login' });
+            res.status(200).json({
+                data: {
+                    user: this.authService.getPublicUser(findUser),
+                    accessToken,
+                },
+                message: 'login',
+            });
 
         } catch (error) {
             next(error);
@@ -40,11 +49,18 @@ class AuthController {
     public logOut = async (req: RequestWithUser, res: Response, next: NextFunction) => {
         try {
             const userData = req.user;
-            const logOutUserData: User = await this.authService.logout(userData);
 
-            req.session.destroy(() => {
-                res.setHeader('Set-Cookie', ['Authorization=; Max-age=0']);
-                res.status(200).json({ data: { user: { email: logOutUserData.email } }, message: 'logout' });
+            const logOutUserData = await this.authService.logout(userData);
+
+            await this.authService.updateUsersRefreshToken(logOutUserData.id, null);
+
+            res.setHeader('Set-Cookie', ['refresh_token=; Max-age=0']);
+
+            res.status(200).json({
+                data: {
+                    user: this.authService.getPublicUser(logOutUserData),
+                },
+                message: 'logout',
             });
 
         } catch (error) {
@@ -54,8 +70,14 @@ class AuthController {
 
     public secret = async (req: RequestWithUser, res: Response, next: NextFunction) => {
         try {
-            const userData: User = req.user;
-            res.status(200).json({ data: { secret: `Only ${userData.email} can see this message.` }, message: 'secret' });
+            const userData = req.user;
+
+            res.status(200).json({
+                data: {
+                    secret: `Only ${userData.email} can see this message.`,
+                },
+                message: 'secret',
+            });
 
         } catch (error) {
             next(error);
@@ -64,8 +86,37 @@ class AuthController {
 
     public current = async (req: RequestWithUser, res: Response, next: NextFunction) => {
         try {
-            const userData: User = req.user;
-            res.status(200).json({ data: { user: { email: userData.email }, }, message: 'currentUser' });
+            const userData = req.user;
+
+            res.status(200).json({
+                data: {
+                    user: this.authService.getPublicUser(userData),
+                },
+                message: 'currentUser',
+            });
+
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public refresh = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+        try {
+            const userData = req.user;
+
+            const { cookie, accessToken, refreshToken } = this.authService.generateTokens(userData);
+
+            await this.authService.updateUsersRefreshToken(userData.id, refreshToken.token);
+
+            res.setHeader('Set-Cookie', [cookie]);
+
+            res.status(200).json({
+                data: {
+                    user: this.authService.getPublicUser(userData),
+                    accessToken,
+                },
+                message: 'refresh'
+            });
 
         } catch (error) {
             next(error);

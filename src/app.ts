@@ -7,19 +7,14 @@ import hpp from 'hpp';
 import morgan from 'morgan';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS, SESSION_SECRET_KEY } from '@config';
+import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS, SESSION_KEY } from '@config';
 import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
 import session from 'express-session';
 
 declare module 'express-session' {
-    interface SessionData {
-        user?: {
-            id: number;
-            email: string;
-        }
-    }
+    interface SessionData {}
 }
 
 class App {
@@ -61,7 +56,7 @@ class App {
         this.app.use(express.urlencoded({ extended: true }));
         this.app.use(cookieParser());
         this.app.use(session({
-            secret: SESSION_SECRET_KEY,
+            secret: SESSION_KEY,
             resave: false,
             saveUninitialized: true,
             cookie: { secure: Boolean(NODE_ENV === 'production') },

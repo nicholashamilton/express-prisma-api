@@ -68,7 +68,13 @@
 					"name": "Logout",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer yourtoken",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "http://localhost:3000/logout",
 							"protocol": "http",
@@ -87,7 +93,13 @@
 					"name": "Secret",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer yourtoken",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "http://localhost:3000/secret",
 							"protocol": "http",
@@ -106,7 +118,13 @@
 					"name": "Current",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer yourtoken",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "http://localhost:3000/currentUser",
 							"protocol": "http",
@@ -116,6 +134,25 @@
 							"port": "3000",
 							"path": [
 								"currentUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/refresh",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"refresh"
 							]
 						}
 					},
@@ -130,7 +167,13 @@
 					"name": "Get All Users",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer yourtoken",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "http://localhost:3000/users",
 							"protocol": "http",
@@ -149,7 +192,13 @@
 					"name": "Get User by ID",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer yourtoken",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "http://localhost:3000/users/1",
 							"protocol": "http",
@@ -169,7 +218,13 @@
 					"name": "Create User",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer yourtoken",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"email\": \"test@test.com\",\n    \"password\": \"test\"\n}",
@@ -197,7 +252,13 @@
 					"name": "Update User",
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer yourtoken",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"email\": \"test@test.com\",\n    \"password\": \"test\"\n}",
@@ -226,7 +287,13 @@
 					"name": "Delete User",
 					"request": {
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer yourtoken",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "http://localhost:3000/users/3",
 							"protocol": "http",
@@ -267,6 +334,12 @@
 					"response": []
 				}
 			]
+		}
+	],
+	"variable": [
+		{
+			"key": "Auth",
+			"value": "Bearer yourtoken"
 		}
 	]
 }

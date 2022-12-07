@@ -3,9 +3,10 @@ import { PrismaClient, User } from '@prisma/client';
 import { CreateUserDto } from '@dtos/users.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
+import { prismaClient } from '@/prisma';
 
 class UserService {
-    public users = new PrismaClient().user;
+    public users = prismaClient.user;
 
     public async findAllUser(): Promise<User[]> {
         const allUser: User[] = await this.users.findMany();
