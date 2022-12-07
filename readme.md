@@ -18,7 +18,7 @@ Start dev environment `npm run dev`
 A [Postman](https://www.postman.com/) collection can be found [here](https://github.com/nicholashamilton/express-prisma-api/blob/main/postman_collection.json)
 
 ### Notes
-This project is still being worked on. Here is a brief overview of the roadmap.
+This project is a work in progress. Here is a brief overview of the roadmap.
 
  * [x] Auth Endpoints (signUp, logIn, logOut, secret, currentUser, refresh)
  * [ ] Auth Endpoints (passwordReset, confirmEmail)

@@ -55,11 +55,18 @@ class AuthService {
         return { expiresIn, token: sign(dataStoredInToken, ACCESS_TOKEN_KEY, { expiresIn }) };
     }
 
-    public createRefreshTokenToken(user: User): TokenData {
+    public createRefreshToken(user: User): TokenData {
         const dataStoredInToken: DataStoredInToken = { id: user.id };
         const expiresIn = 60 * 60 * 24;
 
         return { expiresIn, token: sign(dataStoredInToken, REFRESH_TOKEN_KEY, { expiresIn }) };
+    }
+
+    public async updateUsersRefreshToken(userId: number, refreshToken: string | null) {
+        return this.users.update({
+            where: { id: userId },
+            data: { refreshToken },
+        });
     }
 
     public createRefreshCookie(tokenData: TokenData) {
@@ -69,17 +76,10 @@ class AuthService {
 
     public generateTokens(user: User) {
         const accessToken = this.createAccessToken(user);
-        const refreshToken = this.createRefreshTokenToken(user);
+        const refreshToken = this.createRefreshToken(user);
         const cookie = this.createRefreshCookie(refreshToken);
 
         return { cookie, accessToken, refreshToken };
-    }
-
-    public async updateUsersRefreshToken(userId: number, refreshToken: string | null) {
-        return this.users.update({
-            where: { id: userId },
-            data: { refreshToken },
-        });
     }
 
     public async getUserById(userId: number) {
