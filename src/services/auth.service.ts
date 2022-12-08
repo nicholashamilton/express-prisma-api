@@ -50,14 +50,14 @@ class AuthService {
 
     public createAccessToken(user: User): TokenData {
         const dataStoredInToken: DataStoredInToken = { id: user.id };
-        const expiresIn = 60 * 10;
+        const expiresIn = '10m';
 
         return { expiresIn, token: sign(dataStoredInToken, ACCESS_TOKEN_KEY, { expiresIn }) };
     }
 
     public createRefreshToken(user: User): TokenData {
         const dataStoredInToken: DataStoredInToken = { id: user.id };
-        const expiresIn = 60 * 60 * 24;
+        const expiresIn = '1d';
 
         return { expiresIn, token: sign(dataStoredInToken, REFRESH_TOKEN_KEY, { expiresIn }) };
     }
