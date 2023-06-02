@@ -1,6 +1,8 @@
 # Express Prisma API
 This web API is built with Express, Prisma ORM and TypeScript.
 
+-- Currently not maintaining project --
+
 ## Usage
 Clone the repo `git clone https://github.com/nicholashamilton/express-prisma-api.git`
 
